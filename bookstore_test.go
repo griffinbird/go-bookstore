@@ -10,8 +10,8 @@ import (
 var catalog = bookstore.Catalog{
 	"1": {
 		ID:     "1",
-		Title:  "Nicholas Chucklaeby",
-		Author: "Charles Dickens",
+		Title:  "Hungry 56",
+		Author: "Andy Anderson",
 		Copies: 1,
 	},
 	"2": {
@@ -26,8 +26,8 @@ func TestBook(t *testing.T) {
 	t.Parallel()
 	_ = bookstore.Book{
 		ID:     "1",
-		Title:  "Nicholas Chucklaeby",
-		Author: "Charles Dickens",
+		Title:  "Hungry 56, by Andy Anderson",
+		Author: "Andy Anderson",
 		Copies: 1,
 	}
 }
@@ -36,13 +36,13 @@ func TestGetAllBooks(t *testing.T) {
 	t.Parallel()
 	want := []bookstore.Book{
 		{
-			ID: "1",
+			ID:     "1",
 			Title:  "Hungry 56",
 			Author: "Andy Anderson",
 			Copies: 1,
 		},
 		{
-			ID: "2",
+			ID:     "2",
 			Title:  "Delightfully Uneventful Trip on the Orient Express",
 			Author: "Agatha Christie",
 			Copies: 2,
@@ -55,9 +55,61 @@ func TestGetAllBooks(t *testing.T) {
 }
 
 func TestGetBookDetails(t *testing.T) {
-	want := "Nicholas Chucklaeby, by Charles Dickens"
+	want := "Hungry 56, by Andy Anderson"
 	got := bookstore.GetBookDetails(catalog, "1")
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
 	}
 }
+
+func TestNetPrice(t *testing.T) {
+	b := bookstore.Book{
+		Title:           "Good Omens",
+		PriceCents:      100,
+		DiscountPercent: 25,
+	}
+	want := 75
+	got := b.NetPrice()
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
+	}
+}
+
+func TestSalesPrice(t *testing.T) {
+	b := bookstore.Book{
+		Title:           "Good Omens",
+		PriceCents:      100,
+	}
+	want := 50
+	got := b.SalesPrice()
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
+	}
+}
+
+func TestSetTitle(t *testing.T) {
+	b := bookstore.Book{
+		Title: "Good Omens",
+	}
+	b.SetTitle("Bad Omens")
+	want := "Bad Omens"
+	got := b.Title
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
+	}
+}	
+/* 
+func TestBuy(t *testing.T) {
+	t.Parallel()
+ 	b := bookstore.Book{
+ 		Title:  "Spark Joy",
+ 		Author: "Marie Kondō",
+ 		Copies: 2,
+ 	}
+ 	want := 1
+ 	result := bookstore.Buy(b)
+ 	got := result.Copies
+ 	if want != got {
+ 		t.Errorf("want %d copies after buying 1 copy from a stock of 2, got %d", want, got)
+ 	}
+} */
