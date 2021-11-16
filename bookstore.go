@@ -3,22 +3,26 @@ package bookstore
 import "fmt"
 
 type Book struct {
-	ID string
-	Title      string
-	Author     string
-	Copies     int
-	PriceCents int
+	ID              string
+	Title           string
+	Author          string
+	Copies          int
+	PriceCents      int
 	DiscountPercent int
 }
 
 type Catalog map[string]Book
 
-func GetAllBooks(catalog Catalog) []Book {
+func (catalog Catalog) GetAllBooks() []Book {
 	books := []Book{}
 	for _, b := range catalog {
 		books = append(books, b)
 	}
 	return books
+}
+
+func (catalog *Catalog) AddBook(b Book) {
+	(*catalog)[b.ID] = b
 }
 
 func GetBookDetails(catalog Catalog, ID string) string {
@@ -42,4 +46,8 @@ func (b Book) Buy() int {
 
 func (b *Book) SetTitle(t string) {
 	b.Title = t
+}
+
+func (b *Book) SetPrice(p int) {
+	b.PriceCents = p
 }

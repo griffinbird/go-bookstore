@@ -9,16 +9,18 @@ import (
 
 var catalog = bookstore.Catalog{
 	"1": {
-		ID:     "1",
-		Title:  "Hungry 56",
-		Author: "Andy Anderson",
-		Copies: 1,
+		ID:         "1",
+		Title:      "Hungry 56",
+		Author:     "Andy Anderson",
+		Copies:     1,
+		PriceCents: 100,
 	},
 	"2": {
-		ID:     "2",
-		Title:  "Delightfully Uneventful Trip on the Orient Express",
-		Author: "Agatha Christie",
-		Copies: 2,
+		ID:         "2",
+		Title:      "Delightfully Uneventful Trip on the Orient Express",
+		Author:     "Agatha Christie",
+		Copies:     2,
+		PriceCents: 100,
 	},
 }
 
@@ -48,7 +50,26 @@ func TestGetAllBooks(t *testing.T) {
 			Copies: 2,
 		},
 	}
-	got := bookstore.GetAllBooks(catalog)
+	got := catalog.GetAllBooks()
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
+	}
+}
+
+func TestAddBook(t *testing.T) {
+	t.Parallel()
+	catalog := bookstore.Catalog{}
+	b := bookstore.Book{
+		ID:     "1",
+		Title:  "Hungry 56",
+		Author: "Andy Anderson",
+		Copies: 1,
+	}
+	want := []bookstore.Book{
+		b,
+	}
+	catalog.AddBook(b)
+	got := catalog.GetAllBooks()
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
 	}
@@ -77,8 +98,8 @@ func TestNetPrice(t *testing.T) {
 
 func TestSalesPrice(t *testing.T) {
 	b := bookstore.Book{
-		Title:           "Good Omens",
-		PriceCents:      100,
+		Title:      "Good Omens",
+		PriceCents: 100,
 	}
 	want := 50
 	got := b.SalesPrice()
@@ -97,8 +118,22 @@ func TestSetTitle(t *testing.T) {
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
 	}
-}	
-/* 
+}
+
+func TestSetPriceCents(t *testing.T) {
+	b := bookstore.Book{
+		Title:      "Good Omen",
+		PriceCents: 100,
+	}
+	b.SetPrice(200)
+	want := 200
+	got := b.PriceCents
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
+	}
+}
+
+/*
 func TestBuy(t *testing.T) {
 	t.Parallel()
  	b := bookstore.Book{

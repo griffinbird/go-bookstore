@@ -19,23 +19,13 @@ func AddBook(catalog []Book, book Book) []Book {
 	return catalog
 }
 
+func Overwrite(s []int) {
+	s[0] = 0
+}
+
 func main() {
-	books = []Book{
-		{
-			Title:  "Nicholas Chucklaeby",
-			Author: "Charles Dickens",
-			Copies: 1,
-			Series: 1,
-		},
-		{
-			Title:  "Delightfully Uneventful Trip on the Orient Express",
-			Author: "Agatha Christie",
-			Copies: 2,
-			Series: 1,
-		},
-	}
-	books = AddBook(books, Book{Title: "Spark Joy"})
-	for _, b := range books {
-		fmt.Println((b.Author))
-	}
+	nums := []int{1,2,3}
+	fmt.Println(nums)
+	Overwrite(nums)
+	fmt.Println(nums)
 }
